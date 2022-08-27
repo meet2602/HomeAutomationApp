@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    xmlns:cardView="http://schemas.android.com/apk/res-auto"
+    app:ignore="NamespaceTypo">
+
+    <data>
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/carView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        cardView:cardCornerRadius="16dp"
+        cardView:cardElevation="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#EDEDED">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/tempImg"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="8dp"
+                android:adjustViewBounds="true"
+                android:background="@color/light_grey"
+                android:contentDescription="@string/todo"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_baseline_device_thermostat_24"
+                cardView:layout_constraintEnd_toEndOf="parent"
+                cardView:layout_constraintStart_toStartOf="parent"
+                cardView:layout_constraintTop_toTopOf="parent"
+                cardView:shapeAppearanceOverlay="@style/roundedImageView" />
+
+            <TextView
+                android:id="@+id/tempTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/temperature"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                cardView:layout_constraintEnd_toEndOf="parent"
+                cardView:layout_constraintLeft_toRightOf="@id/tempImg"
+                cardView:layout_constraintStart_toStartOf="parent"
+                cardView:layout_constraintTop_toBottomOf="@+id/tempImg" />
+
+            <TextView
+                android:id="@+id/tempValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/_20_c"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                cardView:layout_constraintBottom_toBottomOf="parent"
+                cardView:layout_constraintEnd_toEndOf="@+id/tempTitle"
+                cardView:layout_constraintStart_toStartOf="@+id/tempTitle"
+                cardView:layout_constraintTop_toBottomOf="@+id/tempTitle" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

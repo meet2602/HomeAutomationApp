@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/background_fenced.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/custom_switch_selector.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/custom_switch_thumb.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/custom_switch_track.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/custom_thumb.xml" value="0.152" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/custom_track.xml" value="0.12" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/customswitchselector.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/ic_baseline_mic_24.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/ic_blue_bg.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/ic_bluetooth_24.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/ic_info_24.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/ic_outline_info_24.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/ic_outline_lightbulb_24.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/ic_power_on.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/new_custom_track.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/new_switch_selector.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/progress_bg.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/sw_thumb.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/sw_track.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/switch_button_shape.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/switch_thumb_false.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/switch_thumb_true.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/switch_track.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/switch_track_green.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/text_outline.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/thumb.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/thumb_selector.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/track.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/drawable/track_selector.xml" value="0.1365" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_bluetooth_control.xml" value="0.2" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_bluetooth_list.xml" value="0.22604166666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_control.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_dash_board.xml" value="0.176" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_global_wifi.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_hotspot_list.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_login.xml" value="0.264" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_register.xml" value="0.264" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_serial_monitor.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_splash.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_verify.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_wifi_control.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_wifi_list.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/add_device_dialog.xml" value="0.29214929214929214" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/add_device_layout.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/add_file_dialog.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/bluetooth_device_item_layout.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/device_item_layout.xml" value="0.176" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/fan_layout.xml" value="0.176" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/full_detail_item_layout.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/humidity_layout.xml" value="0.180078125" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/ip_address_dialog.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/layout_control_shimmer.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/layout_flag.xml" value="0.536" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/layout_loading.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/layout_main_shimmer.xml" value="0.1" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/layout_no_data.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/layout_no_internet.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/rgb_device_layout.xml" value="0.180078125" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/selected_device_layout.xml" value="0.180078125" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/settings_activity.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/temperature_layout.xml" value="0.176" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/un_selected_device_layout.xml" value="0.190625" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/view_device_layout.xml" value="0.264" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/view_devices_layout.xml" value="0.180078125" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/wifi_device_item_layout.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/menu/menu.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/menu/wifi_menu.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/xml/root_preferences.xml" value="0.22604166666666667" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

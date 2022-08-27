@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">Home Automation App</string>
+    <string name="no_internet">Please check your network connection</string>
+    <string name="api_failed">Something not right, Please try again</string>
+    <string name="device_title">Device title</string>
+    <string name="_586_54_58">586:54:58:7485</string>
+    <string name="default_url">http://192.168.1.3:80/</string>
+    <string name="default_ip">192.168.43.106</string>
+    <string name="todo">TODO</string>
+    <string name="enter_the_message">Enter the message</string>
+    <string name="send">Send</string>
+    <string name="clean_data">Clean Data</string>
+    <string name="scroll">Scroll</string>
+    <string name="read">Read</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="connect">Connect</string>
+    <string name="unpair">Unpair</string>
+    <string name="scan">Scan</string>
+    <string name="permission_error">This App will need Permission on your device.</string>
+    <string name="permission_grant">Permission Granted!</string>
+    <string name="ok">OK</string>
+    <string name="loading">Loading</string>
+    <string name="hc_error">Either HC-05 device can\'t connect or you\'re trying to connect to other device</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="enter_the_device_name">Enter The Device Name</string>
+    <string name="enter_the_device_pin">Enter The Device Pin</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="enter_the_ip_address">Enter The IP Address</string>
+    <string name="ip_address">IP Address:</string>
+    <string name="add_device">Add Device</string>
+    <string name="device">Device:</string>
+    <string name="retry">Retry</string>
+    <string name="enter_the_email_id">Enter the email id</string>
+    <string name="enter_the_user_name">Enter the User Name</string>
+    <string name="enter_the_password">Enter the password</string>
+    <string name="enter_the_confirm_password">Enter the confirm password</string>
+    <string name="please_log_in_into_your_account">Please log in into your account</string>
+    <string name="you_are_back">You are back!</string>
+    <string name="log_in">Log in</string>
+    <string name="create_account">Create Account</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="sign_up_here">Sign up here</string>
+    <string name="login_in_here">Login in here</string>
+    <string name="or_log_in_with">Or log in with</string>
+    <string name="log_in_with_gmail">Log in with Gmail</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="join_me">Join me!</string>
+    <string name="please_add_your_detail_to_sign_up">Please add your detail to sign up</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="or_sign_up_with">Or Sign up with</string>
+    <string name="verification_token">Verification\nToken</string>
+    <string name="copy">Copy</string>
+    <string name="welcome_to_home_automation_app">Welcome to Home Automation App</string>
+    <string name="humidity">Humidity</string>
+    <string name="temperature">Temperature</string>
+    <string name="welcome_to_your_smart_home">Welcome to your smart home</string>
+    <string name="hi_meet">Hi Meet</string>
+    <string name="lighting">Lighting</string>
+    <string name="on">ON</string>
+    <string name="fan">Fan</string>
+    <string name="_20_c">20 C</string>
+    <string name="_72">72 %</string>
+</resources>
