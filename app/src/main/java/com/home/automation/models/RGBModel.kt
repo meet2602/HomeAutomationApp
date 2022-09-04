@@ -1,15 +1,17 @@
 package com.home.automation.models
 
 data class RGBModel(
+    var devicePin: Int = 0,
     var deviceId: String = "",
     var deviceName: String = "",
-    var devicePin1: Int = 0,
-    var devicePin2: Int = 0,
-    var devicePin3: Int = 0,
+    var redLightPin: Int = 0,
+    var greenLightPin: Int = 0,
+    var blueLightPin: Int = 0,
     var deviceStatus: Boolean = false,
     var deviceHexCode: String = "",
+    var deviceDetail: String = "",
     var deviceType: String = "",
-    var deviceValue1: Int = 0,
-    var deviceValue2: Int = 0,
-    var deviceValue3: Int = 0,
+    var redLightValue: Int = 0,
+    var greenLightValue: Int = 0,
+    var blueLightValue: Int = 0,
 )

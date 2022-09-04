@@ -2,6 +2,7 @@ package com.home.automation.models
 
 data class FanModel(
     var deviceId: String = "",
+//    var deviceDetail: String  = "",
     var deviceName: String = "",
     var devicePin: Int = 0,
     var deviceStatus: Boolean = false,

@@ -54,7 +54,7 @@ class DashBoardActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //callAllDevice()
+//        callAllDevice()
 
         lifecycleScope.launch {
             connectivityObserver.observe().collect {
@@ -89,29 +89,35 @@ class DashBoardActivity : AppCompatActivity() {
             txtUsername.text = "Hi ${sessionManager.userName}"
             bulbLayout1.bulbSwitch.setOnCheckedChangeListener { _, isChecked ->
                 if (isUpdate) {
+                    val status = if (isChecked) "led32On" else "led32Off"
                     val lightingBody = hashMapOf<String, Any>(
+                        "deviceDetail" to status,
                         "deviceStatus" to isChecked
                     )
-                    bulbStatusUpdate("lights", true, "0", lightingBody, true)
+                    bulbStatusUpdate("Lights", true, "0", lightingBody, true)
                     mp.start()
                 }
             }
             bulbLayout2.bulbSwitch.setOnCheckedChangeListener { _, isChecked ->
                 if (isUpdate) {
+                    val status = if (isChecked) "led33On" else "led33Off"
                     val lightingBody = hashMapOf<String, Any>(
+                        "deviceDetail" to status,
                         "deviceStatus" to isChecked
                     )
-                    bulbStatusUpdate("lights", true, "1", lightingBody, true)
+                    bulbStatusUpdate("Lights", true, "1", lightingBody, true)
                     mp.start()
                 }
             }
 
             fanLayout.fanSwitch.setOnCheckedChangeListener { _, isChecked ->
                 if (isUpdate) {
+                    val status = if (isChecked) "fanOn" else "fanOff"
                     val fanBody = hashMapOf<String, Any>(
+                        "deviceDetail" to status,
                         "deviceStatus" to isChecked
                     )
-                    bulbStatusUpdate("fan", false, "", fanBody, true)
+                    bulbStatusUpdate("Fan", false, "", fanBody, true)
                     mp.start()
                 }
             }
@@ -125,7 +131,7 @@ class DashBoardActivity : AppCompatActivity() {
                         val fanBody = hashMapOf<String, Any>(
                             "deviceValue" to slider.value
                         )
-                        bulbStatusUpdate("fan", false, "", fanBody, false)
+                        bulbStatusUpdate("Fan", false, "", fanBody, false)
                         mp.start()
                     }
                 }
@@ -160,11 +166,11 @@ class DashBoardActivity : AppCompatActivity() {
                     Log.d("b = ", envelope.argb[3].toString())
                     val rgbBody = hashMapOf<String, Any>(
                         "deviceHexCode" to "#${envelope.hexCode}",
-                        "deviceValue1" to envelope.argb[1],
-                        "deviceValue2" to envelope.argb[2],
-                        "deviceValue3" to envelope.argb[3],
+                        "redLightValue" to envelope.argb[1],
+                        "greenLightValue" to envelope.argb[2],
+                        "blueLightValue" to envelope.argb[3],
                     )
-                    bulbStatusUpdate("rgb", false, "", rgbBody, false)
+                    bulbStatusUpdate("RGB", false, "", rgbBody, false)
 
                 })
                 color.show()
@@ -172,10 +178,12 @@ class DashBoardActivity : AppCompatActivity() {
 
             rgbLayout.rgbSwitch.setOnCheckedChangeListener { _, isChecked ->
                 if (isUpdate) {
+                    val status = if (isChecked) "rgbOn" else "rgbOff"
                     val rgbBody = hashMapOf<String, Any>(
+                        "deviceDetail" to status,
                         "deviceStatus" to isChecked
                     )
-                    bulbStatusUpdate("rgb", false, "", rgbBody, true)
+                    bulbStatusUpdate("RGB", false, "", rgbBody, true)
                     mp.start()
                 }
             }
@@ -186,9 +194,10 @@ class DashBoardActivity : AppCompatActivity() {
     private fun callAllDevice() {
         val lighting1Id = UUID.randomUUID().toString()
         val lighting1Body = hashMapOf<String, Any>(
-            "devicePin" to 42,
+            "devicePin" to 32,
             "deviceStatus" to false,
             "deviceType" to "light",
+            "deviceDetail" to "led32Off",
             "deviceId" to lighting1Id,
             "deviceName" to "light 1",
         )
@@ -196,14 +205,33 @@ class DashBoardActivity : AppCompatActivity() {
 
         val lighting2Id = UUID.randomUUID().toString()
         val lighting2Body = hashMapOf<String, Any>(
-            "devicePin" to 43,
+            "devicePin" to 33,
             "deviceStatus" to false,
             "deviceType" to "light",
+            "deviceDetail" to "led33Off",
             "deviceId" to lighting2Id,
             "deviceName" to "light 2",
         )
+        val lighting3Id = UUID.randomUUID().toString()
+        val lighting3Body = hashMapOf<String, Any>(
+            "devicePin" to 34,
+            "deviceStatus" to false,
+            "deviceType" to "light",
+            "deviceDetail" to "led34Off",
+            "deviceId" to lighting3Id,
+            "deviceName" to "light 3",
+        )
+        val lighting4Id = UUID.randomUUID().toString()
+        val lighting4Body = hashMapOf<String, Any>(
+            "devicePin" to 35,
+            "deviceStatus" to false,
+            "deviceType" to "light",
+            "deviceDetail" to "led35Off",
+            "deviceId" to lighting4Id,
+            "deviceName" to "light 4",
+        )
         val lights = hashMapOf<String, Any>(
-            "lights" to listOf(lighting1Body, lighting2Body)
+            "Lights" to listOf(lighting1Body, lighting2Body, lighting3Body, lighting4Body)
         )
         callAddAllDevice(lights, "")
         val tempAnyHumidityId = UUID.randomUUID().toString()
@@ -213,33 +241,36 @@ class DashBoardActivity : AppCompatActivity() {
             "deviceType" to "roomValue",
             "deviceId" to tempAnyHumidityId,
         )
-        callAddAllDevice(tempAnyHumidityBody, "roomValue")
+        callAddAllDevice(tempAnyHumidityBody, "RoomValue")
         val fanId = UUID.randomUUID().toString()
         val fanBody = hashMapOf<String, Any>(
-            "devicePin" to 45,
+            "devicePin" to 36,
             "deviceValue" to 0,
             "deviceStatus" to false,
             "deviceType" to "fan",
+            "deviceDetail" to "fanOff",
             "deviceId" to fanId,
             "deviceName" to "Fan",
         )
-        callAddAllDevice(fanBody, "fan")
+        callAddAllDevice(fanBody, "Fan")
 
         val rgbId = UUID.randomUUID().toString()
         val rgbBody = hashMapOf<String, Any>(
-            "devicePin1" to 46,
-            "devicePin2" to 47,
-            "devicePin3" to 48,
+            "devicePin" to 37,
+            "redLightPin" to 5,
+            "greenLightPin" to 6,
+            "blueLightPin" to 7,
             "deviceHexCode" to "",
-            "deviceValue1" to 0,
-            "deviceValue2" to 0,
-            "deviceValue3" to 0,
+            "deviceDetail" to "rgbOff",
+            "redLightValue" to 0,
+            "greenLightValue" to 0,
+            "blueLightValue" to 0,
             "deviceStatus" to false,
             "deviceType" to "rgb",
             "deviceId" to rgbId,
             "deviceName" to "RGB",
         )
-        callAddAllDevice(rgbBody, "rgb")
+        callAddAllDevice(rgbBody, "RGB")
     }
 
     private fun callAddAllDevice(body: HashMap<String, Any>, deviceId: String) {
@@ -272,6 +303,7 @@ class DashBoardActivity : AppCompatActivity() {
                 }
                 Status.SUCCESS -> {
                     if (it.data != null) {
+                        Log.d("success", it.data.toString())
                         gone(dashBoardBinding.loading.llLoading)
                         val deviceModel = it.data
                         val statusModel = deviceModel.roomValue

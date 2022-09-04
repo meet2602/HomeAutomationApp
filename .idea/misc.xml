@@ -38,7 +38,7 @@
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_dash_board.xml" value="0.176" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_global_wifi.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_hotspot_list.xml" value="0.24010416666666667" />
-        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_login.xml" value="0.264" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_login.xml" value="0.176" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_register.xml" value="0.264" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/activity_serial_monitor.xml" value="0.24010416666666667" />
@@ -50,6 +50,7 @@
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/add_device_layout.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/add_file_dialog.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/bluetooth_device_item_layout.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/bulb_device_layout.xml" value="0.180078125" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/device_item_layout.xml" value="0.176" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/fan_layout.xml" value="0.176" />
         <entry key="..\:/Users/ADMIN/AndroidStudioProjects/HomeAutomationApp/app/src/main/res/layout/full_detail_item_layout.xml" value="0.24010416666666667" />

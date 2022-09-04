@@ -67,6 +67,7 @@ class DeviceRepository {
         mutableLiveData.postValue(Loading())
         deviceRef.child(userId).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                Log.d("suc", dataSnapshot.value.toString())
                 val responseModel = dataSnapshot.getValue(DeviceModel::class.java)
                 mutableLiveData.postValue(Success(responseModel))
             }

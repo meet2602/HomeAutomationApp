@@ -35,7 +35,7 @@ class SplashActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.noInternet.noInternetClicks = this
-
+//        userViewModel.signOut(sessionManager)
     }
 
     override fun onStart() {

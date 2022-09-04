@@ -135,7 +135,7 @@ class UserRepository {
         mutableLiveData.postValue(Resource.Loading())
 
         Firebase.auth.signOut()
-//        sessionManager.clearData()
+        sessionManager.clearData()
         mutableLiveData.postValue(Resource.Success(null))
         return mutableLiveData
     }

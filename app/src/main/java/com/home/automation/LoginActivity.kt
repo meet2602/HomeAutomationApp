@@ -122,7 +122,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                             it.data.deviceConnect
                         )
                         longShowToast("Login Successfully!")
-                        startActivity(Intent(this, MainActivity::class.java))
+                        startActivity(Intent(this, DashBoardActivity::class.java))
                         startActivityAnimation()
                         finish()
                     }
