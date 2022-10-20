@@ -12,17 +12,17 @@
         android:id="@+id/carView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        cardView:cardCornerRadius="16dp"
-        cardView:cardElevation="8dp">
+        app:cardElevation="0dp"
+        cardView:cardCornerRadius="20dp"
+        cardView:cardPreventCornerOverlap="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#EDEDED">
+            android:background="@drawable/black_border">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/bulbImg"
@@ -33,7 +33,7 @@
                 android:background="@color/light_grey"
                 android:contentDescription="@string/todo"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_outline_lightbulb_24"
+                android:src="@drawable/bulb_off_img"
                 cardView:layout_constraintEnd_toEndOf="parent"
                 cardView:layout_constraintStart_toStartOf="parent"
                 cardView:layout_constraintTop_toTopOf="parent"

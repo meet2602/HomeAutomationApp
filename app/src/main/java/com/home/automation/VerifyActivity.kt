@@ -10,11 +10,15 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.home.automation.databinding.ActivityVerifyBinding
 import com.home.automation.utils.*
@@ -48,14 +52,93 @@ class VerifyActivity : AppCompatActivity() {
                 ) { permission() }
             }
         }
-
+    private var isValidPassword = false
+    private var isValidConPassword = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        verifyBinding.edToken.setText(sessionManager.userId)
+        verifyBinding.edPassword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable) {
+                validateEditTextPassword(
+                    verifyBinding.edPassword,
+                    verifyBinding.txtPasswordL,
+                    "password"
+                )
+            }
+        })
+        verifyBinding.edConPassword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable) {
+                validateEditTextPassword(
+                    verifyBinding.edConPassword,
+                    verifyBinding.txtConPasswordL,
+                    "conPassword"
+                )
+            }
+        })
         verifyBinding.copyBtn.setOnClickListener {
-            init()
+            if (verifyBinding.edWifiName.text.toString().trim().isEmpty()) {
+                verifyBinding.txtWifiNameL.error = "Required"
+            } else if (verifyBinding.edWifiName.text.toString().trim().length != 8) {
+                verifyBinding.txtWifiNameL.error = "Wifi name must be 8 characters!"
+            } else {
+                verifyBinding.txtWifiNameL.error = null
+                validateEditTextPassword(
+                    verifyBinding.edPassword,
+                    verifyBinding.txtPasswordL,
+                    "password"
+                )
+                if (isValidPassword) {
+                    validateEditTextPassword(
+                        verifyBinding.edConPassword,
+                        verifyBinding.txtConPasswordL,
+                        "conPassword"
+                    )
+                    if (isValidConPassword) {
+                        if (verifyBinding.edPassword.text.toString()
+                                .trim() != verifyBinding.edConPassword.text.toString().trim()
+                        ) {
+                            verifyBinding.txtConPasswordL.error = "Password don't match!"
+                        } else {
+                            verifyBinding.txtConPasswordL.error = null
+                            init()
+                        }
+                    }
+                }
+            }
         }
 
+    }
+
+    private fun validateEditTextPassword(
+        editText: EditText,
+        textInputLayout: TextInputLayout,
+        state: String,
+    ) {
+        var truthState = false
+        if (editText.text.toString().trim().isEmpty()) {
+            textInputLayout.error = "Required"
+        } else if (editText.text.toString().length != 8) {
+            textInputLayout.error = "Password must be 8 characters!"
+        } else {
+            textInputLayout.error = null
+            truthState = true
+        }
+        if (truthState) {
+            if (state == "password") {
+                isValidPassword = true
+            } else if (state == "conPassword") {
+                isValidConPassword = true
+            }
+        } else {
+            if (state == "password") {
+                isValidPassword = false
+            } else if (state == "conPassword") {
+                isValidConPassword = false
+            }
+        }
     }
 
     private fun init() {
@@ -103,12 +186,10 @@ class VerifyActivity : AppCompatActivity() {
         val checkIpAddress = checkIpAddress(wifiManager, sessionManager)
         Log.d("checkIpAddress", checkIpAddress.toString())
         if (checkIpAddress) {
-//            if (sessionManager.ipAddress.isNotEmpty()) {
-            requestData("http://192.168.4.1/user/${FirebaseAuth.getInstance().uid!!}/dad/0123456789/")
+            requestData("http://192.168.4.1/user/${FirebaseAuth.getInstance().uid!!}/${
+                verifyBinding.edWifiName.text.toString().trim()
+            }/${verifyBinding.edPassword.text.toString().trim()}/")
             callGetDeviceStatus()
-//            }else{
-//                longShowToast("Device Not Connected")
-//            }
         }
     }
 

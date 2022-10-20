@@ -14,14 +14,15 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
+        app:cardElevation="0dp"
         android:foreground="?android:attr/selectableItemBackground"
-        cardView:cardCornerRadius="16dp"
-        cardView:cardElevation="8dp">
+        cardView:cardCornerRadius="20dp"
+        cardView:cardPreventCornerOverlap="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#EDEDED">
+            android:background="@drawable/black_border">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/tempImg"
@@ -63,6 +64,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@string/_20_c"
+                android:textColor="@color/black"
                 android:textAlignment="center"
                 android:textSize="14sp"
                 android:textStyle="bold"

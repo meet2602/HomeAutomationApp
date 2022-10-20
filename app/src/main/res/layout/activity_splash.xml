@@ -16,19 +16,33 @@
             android:id="@+id/noInternet"
             layout="@layout/layout_no_internet" />
 
-        <TextView
-            android:id="@+id/txtWelcome"
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gifImageView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/welcome_to_home_automation_app"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="32sp"
-            android:textStyle="bold"
+            android:layout_height="0dp"
+            android:background="#000D28"
+            android:src="@drawable/splach"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtWelcome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#000D28"
+            android:text="@string/welcome_to_home_automation_app"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="32sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.10" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

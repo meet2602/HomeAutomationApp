@@ -65,7 +65,7 @@
     <string name="please_add_your_detail_to_sign_up">Please add your detail to sign up</string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="or_sign_up_with">Or Sign up with</string>
-    <string name="verification_token">Verification\nToken</string>
+    <string name="verification_token">Wifi\nConfiguration</string>
     <string name="copy">Copy</string>
     <string name="welcome_to_home_automation_app">Welcome to Home Automation App</string>
     <string name="humidity">Humidity</string>
@@ -77,4 +77,9 @@
     <string name="fan">Fan</string>
     <string name="_20_c">20 C</string>
     <string name="_72">72 %</string>
+    <string name="user_id">User Id</string>
+    <string name="enter_the_wifi_name">Enter the wifi name</string>
+    <string name="enter_the_wifi_password">Enter the wifi password</string>
+    <string name="enter_the_wifi_confirm_password">Enter the wifi confirm password</string>
+    <string name="_255">255</string>
 </resources>

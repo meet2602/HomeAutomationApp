@@ -3,7 +3,7 @@ package com.home.automation.repository
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.*
-import com.home.automation.models.DeviceModel
+import com.home.automation.models.ComponentModel
 import com.home.automation.models.DevicesModel
 import com.home.automation.utils.Resource
 import com.home.automation.utils.Resource.*
@@ -62,13 +62,17 @@ class DeviceRepository {
         return mutableLiveData
     }
 
-    fun getAllDeviceList(userId: String): MutableLiveData<Resource<DeviceModel>> {
-        val mutableLiveData: MutableLiveData<Resource<DeviceModel>> = MutableLiveData()
+
+    fun getComponent(userId: String): MutableLiveData<Resource<ComponentModel>> {
+        val rootRef = FirebaseDatabase.getInstance().reference
+        val deviceRef =
+            rootRef.child("Components")
+        val mutableLiveData: MutableLiveData<Resource<ComponentModel>> = MutableLiveData()
         mutableLiveData.postValue(Loading())
-        deviceRef.child(userId).addValueEventListener(object : ValueEventListener {
+        deviceRef.child(userId).child("Devices").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 Log.d("suc", dataSnapshot.value.toString())
-                val responseModel = dataSnapshot.getValue(DeviceModel::class.java)
+                val responseModel = dataSnapshot.getValue(ComponentModel::class.java)
                 mutableLiveData.postValue(Success(responseModel))
             }
 
@@ -84,41 +88,17 @@ class DeviceRepository {
         return mutableLiveData
     }
 
-    fun bulbStatusUpdate(
-        userId: String,
-        state: Boolean,
-        deviceType: String,
-        devicePos: String,
-        body: HashMap<String, Any>,
-    ): MutableLiveData<Resource<Any>> {
-        val mutableLiveData: MutableLiveData<Resource<Any>> = MutableLiveData()
-        mutableLiveData.postValue(Loading())
-        val updateDeviceRef = if (state) {
-            deviceRef.child(userId).child("$deviceType/$devicePos")
-        } else {
-            deviceRef.child(userId).child(deviceType)
-        }
-        updateDeviceRef.updateChildren(body)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val result = task.result
-                    mutableLiveData.postValue(Success(result))
-                } else {
-                    mutableLiveData.postValue(Error(task.exception!!.message.toString(), null))
-                }
-            }
-        return mutableLiveData
-    }
-
-    fun addAllDevice(
+    fun addComponents(
         userId: String,
         body: HashMap<String, Any>,
-        deviceId: String,
     ): MutableLiveData<Resource<Any>> {
+        val rootRef = FirebaseDatabase.getInstance().reference
+        val deviceRef =
+            rootRef.child("Components")
         val mutableLiveData: MutableLiveData<Resource<Any>> = MutableLiveData()
         mutableLiveData.postValue(Loading())
 
-        deviceRef.child(userId).child(deviceId).setValue(body).addOnCompleteListener { task ->
+        deviceRef.child(userId).child("Devices").setValue(body).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val result = task.result
                 mutableLiveData.postValue(Success(result))
@@ -130,6 +110,26 @@ class DeviceRepository {
         return mutableLiveData
     }
 
+    fun updateComponents(
+        userId: String,
+        body: HashMap<String, Any>,
+    ): MutableLiveData<Resource<Any>> {
+        val rootRef = FirebaseDatabase.getInstance().reference
+        val deviceRef =
+            rootRef.child("Components")
+        val mutableLiveData: MutableLiveData<Resource<Any>> = MutableLiveData()
+        mutableLiveData.postValue(Loading())
+        deviceRef.child(userId).child("Devices").updateChildren(body)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result = task.result
+                    mutableLiveData.postValue(Success(result))
+                } else {
+                    mutableLiveData.postValue(Error(task.exception!!.message.toString(), null))
+                }
+            }
+        return mutableLiveData
+    }
 
     fun updateDevice(
         userId: String,

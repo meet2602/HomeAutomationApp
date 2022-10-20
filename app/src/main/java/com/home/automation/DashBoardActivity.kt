@@ -1,25 +1,25 @@
 package com.home.automation
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
+import android.widget.LinearLayout
+import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.slider.Slider
 import com.home.automation.databinding.ActivityDashBoardBinding
+import com.home.automation.databinding.PickColorLayoutBinding
 import com.home.automation.utils.*
 import com.home.automation.viewmodel.DeviceViewModel
-import com.skydoves.colorpickerview.ColorPickerDialog
-import com.skydoves.colorpickerview.ColorPickerView
-import com.skydoves.colorpickerview.flag.BubbleFlag
-import com.skydoves.colorpickerview.flag.FlagMode
-import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
@@ -32,6 +32,16 @@ class DashBoardActivity : AppCompatActivity() {
             R.layout.activity_dash_board
         )
     }
+
+    private val rgbColorBinding: PickColorLayoutBinding by lazy {
+        DataBindingUtil.inflate(
+            LayoutInflater.from(this),
+            R.layout.pick_color_layout,
+            null,
+            false
+        )
+    }
+
     private val connectivityObserver: NetworkConnectivityObserver by lazy {
         NetworkConnectivityObserver(this)
     }
@@ -45,26 +55,30 @@ class DashBoardActivity : AppCompatActivity() {
     }
     private var isUpdate = false
     private val fanSpeed = arrayOf(0, 500, 400, 300, 200, 100)
+    private val fanSpeedOnTxt = arrayOf("fan0On", "fan1On", "fan2On", "fan3On", "fan4On", "fan5On")
+    private val fanSpeedOffTxt =
+        arrayOf("fan0Off", "fan1Off", "fan2Off", "fan3Off", "fan4Off", "fan5Off")
     private val rotate = RotateAnimation(
         0F, 360F,
         Animation.RELATIVE_TO_SELF, 0.5f,
         Animation.RELATIVE_TO_SELF, 0.5f
     )
+    private val rgbDialog: Dialog by lazy {
+        Dialog(this)
+    }
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        callAllDevice()
-
+//        callAddComponents()
         lifecycleScope.launch {
             connectivityObserver.observe().collect {
                 when (it) {
                     ConnectivityObserver.Status.Available -> {
                         gone(dashBoardBinding.noInternet.llNoInternet)
-//                        visible(dashBoardBinding..loading.llLoading)
-
+//                        visible(dashBoardBinding.loading.llLoading)
                         visible(dashBoardBinding.rootLayout)
-                        callDeviceList()
+                        callComponent()
                     }
                     ConnectivityObserver.Status.Unavailable -> {
                         visible(dashBoardBinding.noInternet.llNoInternet)
@@ -84,106 +98,227 @@ class DashBoardActivity : AppCompatActivity() {
 
 
 
+        rgbDialog.setContentView(rgbColorBinding.root)
+        rgbDialog.window!!.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        rgbDialog.setCancelable(false)
+        rgbColorBinding.cancelBtn.setOnClickListener { rgbDialog.dismiss() }
+        rgbColorBinding.redLayout.seekBar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                rgbColorBinding.redLayout.txtColorValue.text = seekBar.progress.toString()
+                setRGBColor()
+            }
 
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+        rgbColorBinding.greenLayout.seekBar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                rgbColorBinding.greenLayout.txtColorValue.text = seekBar.progress.toString()
+                setRGBColor()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+        rgbColorBinding.blueLayout.seekBar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                rgbColorBinding.blueLayout.txtColorValue.text = seekBar.progress.toString()
+                setRGBColor()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+        rgbColorBinding.saveBtn.setOnClickListener {
+
+            val status = if (dashBoardBinding.rgbLayout.rgbSwitch.isChecked) "RGBOn" else "RGBOff"
+            val value =
+                "${status}/${rgbColorBinding.redLayout.seekBar.progress}/${rgbColorBinding.greenLayout.seekBar.progress}/${rgbColorBinding.blueLayout.seekBar.progress}"
+            val body = hashMapOf<String, Any>(
+                "rgbStateMsg" to value
+            )
+            callUpdateComponent(body, true)
+            rgbDialog.dismiss()
+        }
         with(dashBoardBinding) {
             txtUsername.text = "Hi ${sessionManager.userName}"
             bulbLayout1.bulbSwitch.setOnCheckedChangeListener { _, isChecked ->
                 if (isUpdate) {
-                    val status = if (isChecked) "led32On" else "led32Off"
-                    val lightingBody = hashMapOf<String, Any>(
-                        "deviceDetail" to status,
-                        "deviceStatus" to isChecked
+                    val status = if (isChecked) "led1On" else "led1Off"
+                    val body = hashMapOf<String, Any>(
+                        "led1StateMsg" to status
                     )
-                    bulbStatusUpdate("Lights", true, "0", lightingBody, true)
+                    callUpdateComponent(body, true)
                     mp.start()
                 }
             }
             bulbLayout2.bulbSwitch.setOnCheckedChangeListener { _, isChecked ->
                 if (isUpdate) {
-                    val status = if (isChecked) "led33On" else "led33Off"
-                    val lightingBody = hashMapOf<String, Any>(
-                        "deviceDetail" to status,
-                        "deviceStatus" to isChecked
+                    val status = if (isChecked) "led2On" else "led2Off"
+                    val body = hashMapOf<String, Any>(
+                        "led2StateMsg" to status
                     )
-                    bulbStatusUpdate("Lights", true, "1", lightingBody, true)
+                    callUpdateComponent(body, true)
                     mp.start()
                 }
             }
-
-            fanLayout.fanSwitch.setOnCheckedChangeListener { _, isChecked ->
+            bulbLayout3.bulbSwitch.setOnCheckedChangeListener { _, isChecked ->
                 if (isUpdate) {
-                    val status = if (isChecked) "fanOn" else "fanOff"
-                    val fanBody = hashMapOf<String, Any>(
-                        "deviceDetail" to status,
-                        "deviceStatus" to isChecked
+                    val status = if (isChecked) "led3On" else "led3Off"
+                    val body = hashMapOf<String, Any>(
+                        "led3StateMsg" to status
                     )
-                    bulbStatusUpdate("Fan", false, "", fanBody, true)
+                    callUpdateComponent(body, true)
+                    mp.start()
+                }
+            }
+            bulbLayout4.bulbSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isUpdate) {
+                    val status = if (isChecked) "led4On" else "led4Off"
+                    val body = hashMapOf<String, Any>(
+                        "led4StateMsg" to status
+                    )
+                    callUpdateComponent(body, true)
                     mp.start()
                 }
             }
             fanLayout.fanSlider.addOnSliderTouchListener(
                 object : Slider.OnSliderTouchListener {
-                    override fun onStartTrackingTouch(slider: Slider) {
-
-                    }
-
+                    override fun onStartTrackingTouch(slider: Slider) {}
                     override fun onStopTrackingTouch(slider: Slider) {
-                        val fanBody = hashMapOf<String, Any>(
-                            "deviceValue" to slider.value
+                        val status =
+                            if (fanLayout.fanSwitch.isChecked) "fan${slider.value.toInt()}On" else "fan${slider.value.toInt()}Off"
+                        val body = hashMapOf<String, Any>(
+                            "fanStateMsg" to status
                         )
-                        bulbStatusUpdate("Fan", false, "", fanBody, false)
+                        callUpdateComponent(body, true)
                         mp.start()
                     }
                 }
             )
-            rgbLayout.root.setOnClickListener {
-                val color = ColorPickerDialog.Builder(this@DashBoardActivity)
-                    .setTitle("RGB")
-                    .setPreferenceName("MyColorPicker")
-                    .setCancelable(false)
-                    .setPositiveButton("Ok",
-                        ColorEnvelopeListener { envelope, _ ->
-                            Log.d("color",
-                                envelope.hexCode.toString())
-                        })
-                    .setNegativeButton(
-                        getString(R.string.cancel)
-                    ) { dialogInterface, _ -> dialogInterface.dismiss() }
-                    .attachAlphaSlideBar(true) // the default value is true.
-                    .attachBrightnessSlideBar(true) // the default value is true.
-                    .setBottomSpace(12) // set a bottom space between the last sidebar and buttons.
-                val colorPickerView: ColorPickerView = color.colorPickerView
-//        colorPickerView.flagView = CustomFlag(this, R.layout.layout_flag)
-                val bubbleFlag = BubbleFlag(this@DashBoardActivity)
-                bubbleFlag.flagMode = FlagMode.ALWAYS
-                colorPickerView.flagView = bubbleFlag
-                colorPickerView.setColorListener(ColorEnvelopeListener { envelope, fromUser ->
-
-                    Log.d("color = ", envelope.hexCode)
-                    Log.d("a = ", envelope.argb[0].toString())
-                    Log.d("r = ", envelope.argb[1].toString())
-                    Log.d("g = ", envelope.argb[2].toString())
-                    Log.d("b = ", envelope.argb[3].toString())
-                    val rgbBody = hashMapOf<String, Any>(
-                        "deviceHexCode" to "#${envelope.hexCode}",
-                        "redLightValue" to envelope.argb[1],
-                        "greenLightValue" to envelope.argb[2],
-                        "blueLightValue" to envelope.argb[3],
+            fanLayout.fanSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isUpdate) {
+                    val status =
+                        if (isChecked) "fan${fanLayout.fanSlider.value.toInt()}On" else "fan${fanLayout.fanSlider.value.toInt()}Off"
+                    val body = hashMapOf<String, Any>(
+                        "fanStateMsg" to status
                     )
-                    bulbStatusUpdate("RGB", false, "", rgbBody, false)
+                    callUpdateComponent(body, true)
+                    mp.start()
+                }
+            }
+            allApplienceLayout.bulbSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isUpdate) {
+                    if (isChecked) {
+                        val body = hashMapOf<String, Any>(
+                            "led1StateMsg" to "led1On",
+                            "led2StateMsg" to "led2On",
+                            "led3StateMsg" to "led3On",
+                            "led4StateMsg" to "led4On",
+                            "fanStateMsg" to "fan${fanLayout.fanSlider.value.toInt()}On",
+                            "rgbStateMsg" to "RGBOn/${rgbColorBinding.redLayout.seekBar.progress}/${rgbColorBinding.greenLayout.seekBar.progress}/${rgbColorBinding.blueLayout.seekBar.progress}"
+                        )
+                        callUpdateComponent(body, false)
+                        allApplienceLayout.blubState.text = "ON"
+                        allApplienceLayout.bulbSwitch.isChecked = true
+                        allApplienceLayout.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.blub_image,
+                            theme))
+                    } else {
+                        val body = hashMapOf<String, Any>(
+                            "led1StateMsg" to "led1Off",
+                            "led2StateMsg" to "led2Off",
+                            "led3StateMsg" to "led3Off",
+                            "led4StateMsg" to "led4Off",
+                            "fanStateMsg" to "fan${fanLayout.fanSlider.value.toInt()}Off",
+                            "rgbStateMsg" to "RGBOff/${rgbColorBinding.redLayout.seekBar.progress}/${rgbColorBinding.greenLayout.seekBar.progress}/${rgbColorBinding.blueLayout.seekBar.progress}"
+                        )
+                        callUpdateComponent(body, false)
+                        allApplienceLayout.blubState.text = "OFF"
+                        allApplienceLayout.bulbSwitch.isChecked = false
+                        allApplienceLayout.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.bulb_off_img,
+                            theme))
+                    }
 
-                })
-                color.show()
+                    mp.start()
+                }
+            }
+
+            rgbLayout.root.setOnClickListener {
+                rgbDialog.show()
+//                val color = ColorPickerDialog.Builder(this@DashBoardActivity)
+//                    .setTitle("RGB")
+//                    .setPreferenceName("MyColorPicker")
+//                    .setCancelable(false)
+//                    .setPositiveButton("Ok",
+//                        ColorEnvelopeListener { envelope, _ ->
+//                            Log.d("color",
+//                                envelope.hexCode.toString())
+//                            val hex = java.lang.String.format("#%02x%02x%02x",
+//                                envelope.argb[1],
+//                                envelope.argb[2],
+//                                envelope.argb[3])
+//                            val value = "RGB/${envelope.argb[1]}/${envelope.argb[2]}/${envelope.argb[3]}"
+//                            val body = hashMapOf<String, Any>(
+//                                "rgbStateMsg" to value
+//                            )
+//                            callUpdateComponent(body, true)
+//                            rgbLayout.rgbImg.setBackgroundColor(Color.parseColor(hex))
+//
+//                        })
+//                    .setNegativeButton(
+//                        getString(R.string.cancel)
+//                    ) { dialogInterface, _ -> dialogInterface.dismiss() }
+//                    .attachAlphaSlideBar(true) // the default value is true.
+//                    .attachBrightnessSlideBar(true) // the default value is true.
+//                    .setBottomSpace(12) // set a bottom space between the last sidebar and buttons.
+//                val colorPickerView: ColorPickerView = color.colorPickerView
+////        colorPickerView.flagView = CustomFlag(this, R.layout.layout_flag)
+//                val bubbleFlag = BubbleFlag(this@DashBoardActivity)
+//                bubbleFlag.flagMode = FlagMode.ALWAYS
+//                colorPickerView.flagView = bubbleFlag
+//                colorPickerView.setColorListener(ColorEnvelopeListener { envelope, fromUser ->
+//
+//                    Log.d("color = ", envelope.hexCode)
+//                    Log.d("a = ", envelope.argb[0].toString())
+//                    Log.d("r = ", envelope.argb[1].toString())
+//                    Log.d("g = ", envelope.argb[2].toString())
+//                    Log.d("b = ", envelope.argb[3].toString())
+//
+////                    val rgbBody = hashMapOf<String, Any>(
+////                        "deviceHexCode" to "#${envelope.hexCode}",
+////                        "redLightValue" to envelope.argb[1],
+////                        "greenLightValue" to envelope.argb[2],
+////                        "blueLightValue" to envelope.argb[3],
+////                    )
+////                    bulbStatusUpdate("RGB", false, "", rgbBody, false)
+////                    val body = hashMapOf<String, Any>(
+////                        "RGB1StateHexCode" to "#${envelope.hexCode}",
+////                        "RGB1RValue" to envelope.argb[1],
+////                        "RGB1GValue" to envelope.argb[2],
+////                        "RGB1BValue" to envelope.argb[3],
+////                    )
+////                    callUpdateComponent(body, false)
+//
+//                })
+//                color.show()
             }
 
             rgbLayout.rgbSwitch.setOnCheckedChangeListener { _, isChecked ->
                 if (isUpdate) {
-                    val status = if (isChecked) "rgbOn" else "rgbOff"
-                    val rgbBody = hashMapOf<String, Any>(
-                        "deviceDetail" to status,
-                        "deviceStatus" to isChecked
+                    val status =
+                        if (isChecked) "RGBOn" else "RGBOff"
+                    val value =
+                        "${status}/${rgbColorBinding.redLayout.seekBar.progress}/${rgbColorBinding.greenLayout.seekBar.progress}/${rgbColorBinding.blueLayout.seekBar.progress}"
+                    val body = hashMapOf<String, Any>(
+                        "rgbStateMsg" to value
                     )
-                    bulbStatusUpdate("RGB", false, "", rgbBody, true)
+                    callUpdateComponent(body, true)
                     mp.start()
                 }
             }
@@ -191,112 +326,9 @@ class DashBoardActivity : AppCompatActivity() {
         }
     }
 
-    private fun callAllDevice() {
-        val lighting1Id = UUID.randomUUID().toString()
-        val lighting1Body = hashMapOf<String, Any>(
-            "devicePin" to 32,
-            "deviceStatus" to false,
-            "deviceType" to "light",
-            "deviceDetail" to "led32Off",
-            "deviceId" to lighting1Id,
-            "deviceName" to "light 1",
-        )
-
-
-        val lighting2Id = UUID.randomUUID().toString()
-        val lighting2Body = hashMapOf<String, Any>(
-            "devicePin" to 33,
-            "deviceStatus" to false,
-            "deviceType" to "light",
-            "deviceDetail" to "led33Off",
-            "deviceId" to lighting2Id,
-            "deviceName" to "light 2",
-        )
-        val lighting3Id = UUID.randomUUID().toString()
-        val lighting3Body = hashMapOf<String, Any>(
-            "devicePin" to 34,
-            "deviceStatus" to false,
-            "deviceType" to "light",
-            "deviceDetail" to "led34Off",
-            "deviceId" to lighting3Id,
-            "deviceName" to "light 3",
-        )
-        val lighting4Id = UUID.randomUUID().toString()
-        val lighting4Body = hashMapOf<String, Any>(
-            "devicePin" to 35,
-            "deviceStatus" to false,
-            "deviceType" to "light",
-            "deviceDetail" to "led35Off",
-            "deviceId" to lighting4Id,
-            "deviceName" to "light 4",
-        )
-        val lights = hashMapOf<String, Any>(
-            "Lights" to listOf(lighting1Body, lighting2Body, lighting3Body, lighting4Body)
-        )
-        callAddAllDevice(lights, "")
-        val tempAnyHumidityId = UUID.randomUUID().toString()
-        val tempAnyHumidityBody = hashMapOf<String, Any>(
-            "tempValue" to 0.0F,
-            "humidityValue" to 0.0F,
-            "deviceType" to "roomValue",
-            "deviceId" to tempAnyHumidityId,
-        )
-        callAddAllDevice(tempAnyHumidityBody, "RoomValue")
-        val fanId = UUID.randomUUID().toString()
-        val fanBody = hashMapOf<String, Any>(
-            "devicePin" to 36,
-            "deviceValue" to 0,
-            "deviceStatus" to false,
-            "deviceType" to "fan",
-            "deviceDetail" to "fanOff",
-            "deviceId" to fanId,
-            "deviceName" to "Fan",
-        )
-        callAddAllDevice(fanBody, "Fan")
-
-        val rgbId = UUID.randomUUID().toString()
-        val rgbBody = hashMapOf<String, Any>(
-            "devicePin" to 37,
-            "redLightPin" to 5,
-            "greenLightPin" to 6,
-            "blueLightPin" to 7,
-            "deviceHexCode" to "",
-            "deviceDetail" to "rgbOff",
-            "redLightValue" to 0,
-            "greenLightValue" to 0,
-            "blueLightValue" to 0,
-            "deviceStatus" to false,
-            "deviceType" to "rgb",
-            "deviceId" to rgbId,
-            "deviceName" to "RGB",
-        )
-        callAddAllDevice(rgbBody, "RGB")
-    }
-
-    private fun callAddAllDevice(body: HashMap<String, Any>, deviceId: String) {
-        deviceViewModel.addAllDevice(sessionManager.userId, body, deviceId).observe(this) {
-            when (it.status) {
-
-                Status.LOADING -> {
-
-                }
-                Status.SUCCESS -> {
-                    Log.d("success", it.message.toString())
-                    longShowToast("Device Added Successfully!")
-
-                }
-                Status.ERROR -> {
-                    Log.d("error", it.message.toString())
-                    longShowToast(it.message.toString())
-                }
-            }
-
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun callDeviceList() {
-        deviceViewModel.getAllDeviceList(sessionManager.userId).observe(this) {
+    @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
+    private fun callComponent() {
+        deviceViewModel.getComponent(sessionManager.userId).observe(this) {
             when (it.status) {
                 Status.LOADING -> {
 
@@ -305,62 +337,133 @@ class DashBoardActivity : AppCompatActivity() {
                     if (it.data != null) {
                         Log.d("success", it.data.toString())
                         gone(dashBoardBinding.loading.llLoading)
-                        val deviceModel = it.data
-                        val statusModel = deviceModel.roomValue
-                        val fanModel = deviceModel.fan
-                        val bulbModel = deviceModel.lights
-                        val rgbModel = deviceModel.rgb
+                        val data = it.data
 
                         with(
                             dashBoardBinding
                         ) {
                             tempLayout.tempValue.text =
-                                statusModel.tempValue.toString() + " \u2103"
-                            humidityLayout.humidityValue.text =
-                                statusModel.humidityValue.toString() + " %"
-                            bulbLayout1.blubTitle.text = bulbModel[0].deviceName
-                            bulbLayout2.blubTitle.text = bulbModel[1].deviceName
-                            if (bulbModel[0].deviceStatus) {
+                                data.tempValue.toString() + " \u2103"
+//                            humidityLayout.humidityValue.text =
+//                                data.humidityValue.toString() + " %"
+                            bulbLayout1.blubTitle.text = "Light 1"
+                            bulbLayout2.blubTitle.text = "Light 2"
+                            bulbLayout3.blubTitle.text = "Light 3"
+                            bulbLayout4.blubTitle.text = "Light 4"
+                            allApplienceLayout.blubTitle.text = "All Appliences"
+
+                            if (data.led1StateMsg == "led1On") {
                                 bulbLayout1.blubState.text = "ON"
                                 bulbLayout1.bulbSwitch.isChecked = true
+                                bulbLayout1.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.blub_image,
+                                    theme))
                             } else {
                                 bulbLayout1.blubState.text = "OFF"
                                 bulbLayout1.bulbSwitch.isChecked = false
+                                bulbLayout1.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.bulb_off_img,
+                                    theme))
                             }
-                            if (bulbModel[1].deviceStatus) {
+                            if (data.led2StateMsg == "led2On") {
                                 bulbLayout2.blubState.text = "ON"
                                 bulbLayout2.bulbSwitch.isChecked = true
+                                bulbLayout2.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.blub_image,
+                                    theme))
                             } else {
                                 bulbLayout2.blubState.text = "OFF"
                                 bulbLayout2.bulbSwitch.isChecked = false
+                                bulbLayout2.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.bulb_off_img,
+                                    theme))
                             }
-                            fanLayout.fanTitle.text = fanModel.deviceName
-                            fanLayout.fanSlider.value = fanModel.deviceValue.toFloat()
-                            if (fanModel.deviceStatus) {
+
+                            if (data.led3StateMsg == "led3On") {
+                                bulbLayout3.blubState.text = "ON"
+                                bulbLayout3.bulbSwitch.isChecked = true
+                                bulbLayout3.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.blub_image,
+                                    theme))
+                            } else {
+                                bulbLayout3.blubState.text = "OFF"
+                                bulbLayout3.bulbSwitch.isChecked = false
+                                bulbLayout3.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.bulb_off_img,
+                                    theme))
+                            }
+                            if (data.led4StateMsg == "led4On") {
+                                bulbLayout4.blubState.text = "ON"
+                                bulbLayout4.bulbSwitch.isChecked = true
+                                bulbLayout4.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.blub_image,
+                                    theme))
+                            } else {
+                                bulbLayout4.blubState.text = "OFF"
+                                bulbLayout4.bulbSwitch.isChecked = false
+                                bulbLayout4.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.bulb_off_img,
+                                    theme))
+                            }
+                            if (fanSpeedOnTxt.indexOf(data.fanStateMsg) != -1) {
+                                fanLayout.fanSlider.value =
+                                    fanSpeedOnTxt.indexOf(data.fanStateMsg).toFloat()
                                 fanLayout.fanState.text = "ON"
                                 fanLayout.fanSwitch.isChecked = true
-
-                                if (fanModel.deviceValue > 0) {
-                                    rotate.duration = fanSpeed[fanModel.deviceValue].toLong()
+                                if (data.fanStateMsg != "fan0On") {
+                                    rotate.duration =
+                                        fanSpeed[fanSpeedOnTxt.indexOf(data.fanStateMsg)].toLong()
                                     rotate.repeatCount = Animation.INFINITE
                                     fanLayout.fanImg.startAnimation(rotate)
                                 } else {
                                     fanLayout.fanImg.clearAnimation()
                                 }
-                            } else {
+                            } else if (fanSpeedOffTxt.indexOf(data.fanStateMsg) != -1) {
+                                fanLayout.fanSlider.value =
+                                    fanSpeedOffTxt.indexOf(data.fanStateMsg).toFloat()
                                 fanLayout.fanState.text = "OFF"
                                 fanLayout.fanSwitch.isChecked = false
                                 fanLayout.fanImg.clearAnimation()
                             }
-                            if (rgbModel.deviceHexCode.isNotEmpty()) {
-                                rgbLayout.rgbImg.setBackgroundColor(Color.parseColor(rgbModel.deviceHexCode))
-                            }
-                            if (rgbModel.deviceStatus) {
+                            val rgbStatue = data.RGBStateMsg.split("/")
+                            if (data.RGBStateMsg.indexOf("RGBOn") != -1) {
                                 rgbLayout.rgbState.text = "ON"
                                 rgbLayout.rgbSwitch.isChecked = true
-                            } else {
+                            } else if (data.RGBStateMsg.indexOf("RGBOff") != -1) {
                                 rgbLayout.rgbState.text = "OFF"
                                 rgbLayout.rgbSwitch.isChecked = false
+                            }
+                            if (rgbStatue.size == 4) {
+                                val hex = String.format("#%02x%02x%02x",
+                                    rgbStatue[1].toInt(),
+                                    rgbStatue[2].toInt(),
+                                    rgbStatue[3].toInt())
+                                rgbLayout.rgbImg.setBackgroundColor(Color.parseColor(hex))
+                                rgbColorBinding.colorView.setBackgroundColor(Color.parseColor(hex))
+
+                                rgbColorBinding.redLayout.seekBar.progress = rgbStatue[1].toInt()
+                                rgbColorBinding.redLayout.textFieldValue.text = "R"
+                                rgbColorBinding.redLayout.txtColorValue.text = rgbStatue[1]
+
+                                rgbColorBinding.greenLayout.seekBar.progress = rgbStatue[2].toInt()
+                                rgbColorBinding.greenLayout.textFieldValue.text = "G"
+                                rgbColorBinding.greenLayout.txtColorValue.text = rgbStatue[2]
+
+                                rgbColorBinding.blueLayout.seekBar.progress = rgbStatue[3].toInt()
+                                rgbColorBinding.blueLayout.textFieldValue.text = "B"
+                                rgbColorBinding.blueLayout.txtColorValue.text = rgbStatue[3]
+                            }
+
+                            if (data.led1StateMsg == "led1On" && data.led2StateMsg == "led2On" &&
+                                data.led3StateMsg == "led3On" && data.led4StateMsg == "led4On" &&
+                                data.RGBStateMsg.indexOf("RGBOn") != -1 &&
+                                fanSpeedOnTxt.indexOf(data.fanStateMsg) != -1
+                            ) {
+                                allApplienceLayout.blubState.text = "ON"
+                                allApplienceLayout.bulbSwitch.isChecked = true
+                                allApplienceLayout.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.blub_image,
+                                    theme))
+                            } else if (data.led1StateMsg == "led1Off" && data.led2StateMsg == "led2Off" &&
+                                data.led3StateMsg == "led3Off" && data.led4StateMsg == "led4Off" &&
+                                data.RGBStateMsg.indexOf("RGBOff") != -1 &&
+                                fanSpeedOffTxt.indexOf(data.fanStateMsg) != -1
+                            ) {
+                                allApplienceLayout.blubState.text = "OFF"
+                                allApplienceLayout.bulbSwitch.isChecked = false
+                                allApplienceLayout.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.bulb_off_img,
+                                    theme))
                             }
                             isUpdate = true
                         }
@@ -375,14 +478,19 @@ class DashBoardActivity : AppCompatActivity() {
         }
     }
 
-    private fun bulbStatusUpdate(
-        deviceType: String,
-        state: Boolean,
-        devicePos: String,
+    private fun setRGBColor() {
+        val hex = String.format("#%02x%02x%02x",
+            rgbColorBinding.redLayout.seekBar.progress,
+            rgbColorBinding.greenLayout.seekBar.progress,
+            rgbColorBinding.blueLayout.seekBar.progress)
+        rgbColorBinding.colorView.setBackgroundColor(Color.parseColor(hex))
+    }
+
+    private fun callUpdateComponent(
         body: HashMap<String, Any>,
         toastState: Boolean,
     ) {
-        deviceViewModel.bulbStatusUpdate(sessionManager.userId, state, deviceType, devicePos, body)
+        deviceViewModel.updateComponents(sessionManager.userId, body)
             .observe(this) {
 
                 when (it.status) {
@@ -405,4 +513,37 @@ class DashBoardActivity : AppCompatActivity() {
             }
     }
 
+    private fun callAddComponents() {
+        val body = hashMapOf<String, Any>(
+            "led1StateMsg" to "led1Off",
+            "led2StateMsg" to "led2Off",
+            "led3StateMsg" to "led3Off",
+            "led4StateMsg" to "led4Off",
+            "fan1StateMsg" to "fan1Off/0",
+            "fan2StateMsg" to "fan2Off/0",
+            "RGB1StateMsg" to "rgb1Off/#FFFFFF/0/0/0",
+            "RGB2StateMsg" to "rgb2Off/#FFFFFF/0/0/0",
+            "tempValue" to 0.0F,
+            "humidityValue" to 0.0F,
+        )
+
+        deviceViewModel.addComponents(sessionManager.userId, body).observe(this) {
+            when (it.status) {
+
+                Status.LOADING -> {
+
+                }
+                Status.SUCCESS -> {
+                    Log.d("success", it.message.toString())
+                    longShowToast("Device Added Successfully!")
+
+                }
+                Status.ERROR -> {
+                    Log.d("error", it.message.toString())
+                    longShowToast(it.message.toString())
+                }
+            }
+
+        }
+    }
 }
