@@ -2,6 +2,8 @@ package com.home.automation
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -20,6 +22,7 @@ import com.home.automation.databinding.ActivityDashBoardBinding
 import com.home.automation.databinding.PickColorLayoutBinding
 import com.home.automation.utils.*
 import com.home.automation.viewmodel.DeviceViewModel
+import com.home.automation.viewmodel.UserViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
@@ -32,7 +35,6 @@ class DashBoardActivity : AppCompatActivity() {
             R.layout.activity_dash_board
         )
     }
-
     private val rgbColorBinding: PickColorLayoutBinding by lazy {
         DataBindingUtil.inflate(
             LayoutInflater.from(this),
@@ -49,12 +51,16 @@ class DashBoardActivity : AppCompatActivity() {
         ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)
             .create(DeviceViewModel()::class.java)
     }
+    private val userViewModel: UserViewModel by lazy {
+        ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)
+            .create(UserViewModel()::class.java)
+    }
     private val sessionManager: SessionManager by lazy { SessionManager(this) }
     private val mp: MediaPlayer by lazy {
         MediaPlayer.create(this, R.raw.button_29)
     }
     private var isUpdate = false
-    private val fanSpeed = arrayOf(0, 500, 400, 300, 200, 100)
+    private val fanSpeed = arrayOf(0, 400, 300, 200, 100, 50)
     private val fanSpeedOnTxt = arrayOf("fan0On", "fan1On", "fan2On", "fan3On", "fan4On", "fan5On")
     private val fanSpeedOffTxt =
         arrayOf("fan0Off", "fan1Off", "fan2Off", "fan3Off", "fan4Off", "fan5Off")
@@ -136,7 +142,6 @@ class DashBoardActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
         rgbColorBinding.saveBtn.setOnClickListener {
-
             val status = if (dashBoardBinding.rgbLayout.rgbSwitch.isChecked) "RGBOn" else "RGBOff"
             val value =
                 "${status}/${rgbColorBinding.redLayout.seekBar.progress}/${rgbColorBinding.greenLayout.seekBar.progress}/${rgbColorBinding.blueLayout.seekBar.progress}"
@@ -148,6 +153,34 @@ class DashBoardActivity : AppCompatActivity() {
         }
         with(dashBoardBinding) {
             txtUsername.text = "Hi ${sessionManager.userName}"
+            logoutBtn.setOnClickListener {
+                showConfirmDialog("Logout",
+                    "Are you sure you wish to logout?") { _: DialogInterface?, which: Int ->
+                    when (which) {
+                        DialogInterface.BUTTON_POSITIVE -> {
+                            userViewModel.signOut(sessionManager).observe(this@DashBoardActivity) {
+                                when (it.status) {
+
+                                    Status.LOADING -> {
+
+                                    }
+                                    Status.SUCCESS -> {
+                                        longShowToast("Logout Successfully!")
+                                        startActivity(Intent(this@DashBoardActivity,
+                                            LoginActivity::class.java))
+                                        finish()
+                                    }
+                                    Status.ERROR -> {
+                                        Log.d("error", it.message.toString())
+                                    }
+                                }
+                            }
+                        }
+                        DialogInterface.BUTTON_NEGATIVE -> {
+                        }
+                    }
+                }
+            }
             bulbLayout1.bulbSwitch.setOnCheckedChangeListener { _, isChecked ->
                 if (isUpdate) {
                     val status = if (isChecked) "led1On" else "led1Off"
@@ -216,13 +249,14 @@ class DashBoardActivity : AppCompatActivity() {
             allApplienceLayout.bulbSwitch.setOnCheckedChangeListener { _, isChecked ->
                 if (isUpdate) {
                     if (isChecked) {
+                        isUpdate = false
                         val body = hashMapOf<String, Any>(
                             "led1StateMsg" to "led1On",
                             "led2StateMsg" to "led2On",
                             "led3StateMsg" to "led3On",
                             "led4StateMsg" to "led4On",
-                            "fanStateMsg" to "fan${fanLayout.fanSlider.value.toInt()}On",
-                            "rgbStateMsg" to "RGBOn/${rgbColorBinding.redLayout.seekBar.progress}/${rgbColorBinding.greenLayout.seekBar.progress}/${rgbColorBinding.blueLayout.seekBar.progress}"
+                            "fanStateMsg" to "fan4On",
+                            "rgbStateMsg" to "RGBOn/255/255/255"
                         )
                         callUpdateComponent(body, false)
                         allApplienceLayout.blubState.text = "ON"
@@ -230,13 +264,14 @@ class DashBoardActivity : AppCompatActivity() {
                         allApplienceLayout.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.blub_image,
                             theme))
                     } else {
+                        isUpdate = false
                         val body = hashMapOf<String, Any>(
                             "led1StateMsg" to "led1Off",
                             "led2StateMsg" to "led2Off",
                             "led3StateMsg" to "led3Off",
                             "led4StateMsg" to "led4Off",
                             "fanStateMsg" to "fan${fanLayout.fanSlider.value.toInt()}Off",
-                            "rgbStateMsg" to "RGBOff/${rgbColorBinding.redLayout.seekBar.progress}/${rgbColorBinding.greenLayout.seekBar.progress}/${rgbColorBinding.blueLayout.seekBar.progress}"
+                            "rgbStateMsg" to "RGBOff/255/255/255"
                         )
                         callUpdateComponent(body, false)
                         allApplienceLayout.blubState.text = "OFF"
@@ -445,26 +480,6 @@ class DashBoardActivity : AppCompatActivity() {
                                 rgbColorBinding.blueLayout.textFieldValue.text = "B"
                                 rgbColorBinding.blueLayout.txtColorValue.text = rgbStatue[3]
                             }
-
-                            if (data.led1StateMsg == "led1On" && data.led2StateMsg == "led2On" &&
-                                data.led3StateMsg == "led3On" && data.led4StateMsg == "led4On" &&
-                                data.RGBStateMsg.indexOf("RGBOn") != -1 &&
-                                fanSpeedOnTxt.indexOf(data.fanStateMsg) != -1
-                            ) {
-                                allApplienceLayout.blubState.text = "ON"
-                                allApplienceLayout.bulbSwitch.isChecked = true
-                                allApplienceLayout.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.blub_image,
-                                    theme))
-                            } else if (data.led1StateMsg == "led1Off" && data.led2StateMsg == "led2Off" &&
-                                data.led3StateMsg == "led3Off" && data.led4StateMsg == "led4Off" &&
-                                data.RGBStateMsg.indexOf("RGBOff") != -1 &&
-                                fanSpeedOffTxt.indexOf(data.fanStateMsg) != -1
-                            ) {
-                                allApplienceLayout.blubState.text = "OFF"
-                                allApplienceLayout.bulbSwitch.isChecked = false
-                                allApplienceLayout.bulbImg.setImageDrawable(resources.getDrawable(R.drawable.bulb_off_img,
-                                    theme))
-                            }
                             isUpdate = true
                         }
 
@@ -500,7 +515,7 @@ class DashBoardActivity : AppCompatActivity() {
                     }
                     Status.SUCCESS -> {
                         Log.d("success", it.message.toString())
-                        if (toastState) {
+                        if (toastState && isUpdate) {
                             longShowToast("Updated Successfully!")
                         }
                     }

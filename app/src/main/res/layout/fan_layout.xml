@@ -92,7 +92,7 @@
                 android:layout_margin="8dp"
                 android:stepSize="1"
                 android:valueFrom="0"
-                android:valueTo="5"
+                android:valueTo="4"
                 cardView:labelBehavior="floating"
                 cardView:layout_constraintBottom_toBottomOf="parent"
                 cardView:layout_constraintEnd_toEndOf="parent"

@@ -109,6 +109,20 @@ fun showPermissionFaiDialog(activity: Activity, okListener: DialogInterface.OnCl
         .show()
 }
 
+fun Context.showConfirmDialog(
+    title: String,
+    message: String,
+    okListener: DialogInterface.OnClickListener,
+) {
+    MaterialAlertDialogBuilder(this)
+        .setTitle(title)
+        .setMessage(message)
+        .setPositiveButton("OK", okListener)
+        .setNegativeButton("Cancel", okListener)
+        .create()
+        .show()
+}
+
 fun hideKeyBoard(activity: Activity) {
     val view: View = activity.findViewById(android.R.id.content)
     val inputMethodManager: InputMethodManager =

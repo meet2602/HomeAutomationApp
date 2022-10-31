@@ -2,10 +2,10 @@ package com.home.automation
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -46,6 +46,7 @@ class SplashActivity : AppCompatActivity(), View.OnClickListener {
                     ConnectivityObserver.Status.Available -> {
                         gone(binding.noInternet.llNoInternet)
                         visible(binding.txtWelcome)
+                        visible(binding.gifImageView)
                         if (FirebaseAuth.getInstance().currentUser != null) {
                             callGetDeviceStatus()
                         } else {
@@ -56,14 +57,16 @@ class SplashActivity : AppCompatActivity(), View.OnClickListener {
                     ConnectivityObserver.Status.Unavailable -> {
                         visible(binding.noInternet.llNoInternet)
                         gone(binding.txtWelcome)
+                        gone(binding.gifImageView)
+
                     }
                     ConnectivityObserver.Status.Losing -> {
                         visible(binding.noInternet.llNoInternet)
-                        gone(binding.txtWelcome)
+                        gone(binding.gifImageView)
                     }
                     ConnectivityObserver.Status.Lost -> {
                         visible(binding.noInternet.llNoInternet)
-                        gone(binding.txtWelcome)
+                        gone(binding.gifImageView)
                     }
                 }
             }
@@ -89,10 +92,11 @@ class SplashActivity : AppCompatActivity(), View.OnClickListener {
                             startActivity(Intent(this, VerifyActivity::class.java))
                             finish()
                         }
-                    } else {
-                        startActivity(Intent(this, VerifyActivity::class.java))
-                        finish()
                     }
+//                    else {
+//                        startActivity(Intent(this, VerifyActivity::class.java))
+//                        finish()
+//                    }
                 }
                 Status.ERROR -> {
                     Log.d("error", it.message.toString())
