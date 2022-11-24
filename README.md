@@ -11,3 +11,7 @@ Home automation system controls the home appliances or appliances at any other p
 <img src="screenshot/5.jpeg" width="30%">
 <img src="screenshot/6.jpeg" width="30%">
 </div>
+
+# Video 
+https://user-images.githubusercontent.com/71074485/203806866-debcef11-a8d1-4f91-99f3-f76b0423aba3.mp4
+
