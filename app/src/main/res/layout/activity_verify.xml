@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:hint="@string/enter_the_wifi_password"
+                android:hint="@string/enter_the_wifi_confirm_password"
                 app:endIconMode="password_toggle"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@null"

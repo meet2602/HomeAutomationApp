@@ -153,6 +153,8 @@ class DashBoardActivity : AppCompatActivity() {
         }
         with(dashBoardBinding) {
             txtUsername.text = "Hi ${sessionManager.userName}"
+            tempLayout.tempValue.text =
+                "32" + " \u2103"
             logoutBtn.setOnClickListener {
                 showConfirmDialog("Logout",
                     "Are you sure you wish to logout?") { _: DialogInterface?, which: Int ->
@@ -378,14 +380,14 @@ class DashBoardActivity : AppCompatActivity() {
                             dashBoardBinding
                         ) {
                             tempLayout.tempValue.text =
-                                data.tempValue.toString() + " \u2103"
+                                "32" + " \u2103"
 //                            humidityLayout.humidityValue.text =
 //                                data.humidityValue.toString() + " %"
                             bulbLayout1.blubTitle.text = "Light 1"
                             bulbLayout2.blubTitle.text = "Light 2"
                             bulbLayout3.blubTitle.text = "Light 3"
                             bulbLayout4.blubTitle.text = "Light 4"
-                            allApplienceLayout.blubTitle.text = "All Appliences"
+                            allApplienceLayout.blubTitle.text = "All Appliances"
 
                             if (data.led1StateMsg == "led1On") {
                                 bulbLayout1.blubState.text = "ON"
@@ -466,19 +468,19 @@ class DashBoardActivity : AppCompatActivity() {
                                     rgbStatue[2].toInt(),
                                     rgbStatue[3].toInt())
                                 rgbLayout.rgbImg.setBackgroundColor(Color.parseColor(hex))
-                                rgbColorBinding.colorView.setBackgroundColor(Color.parseColor(hex))
+//                                rgbColorBinding.colorView.setBackgroundColor(Color.parseColor(hex))
 
-                                rgbColorBinding.redLayout.seekBar.progress = rgbStatue[1].toInt()
+//                                rgbColorBinding.redLayout.seekBar.progress = rgbStatue[1].toInt()
                                 rgbColorBinding.redLayout.textFieldValue.text = "R"
-                                rgbColorBinding.redLayout.txtColorValue.text = rgbStatue[1]
+//                                rgbColorBinding.redLayout.txtColorValue.text = rgbStatue[1]
 
-                                rgbColorBinding.greenLayout.seekBar.progress = rgbStatue[2].toInt()
+//                                rgbColorBinding.greenLayout.seekBar.progress = rgbStatue[2].toInt()
                                 rgbColorBinding.greenLayout.textFieldValue.text = "G"
-                                rgbColorBinding.greenLayout.txtColorValue.text = rgbStatue[2]
+//                                rgbColorBinding.greenLayout.txtColorValue.text = rgbStatue[2]
 
-                                rgbColorBinding.blueLayout.seekBar.progress = rgbStatue[3].toInt()
+//                                rgbColorBinding.blueLayout.seekBar.progress = rgbStatue[3].toInt()
                                 rgbColorBinding.blueLayout.textFieldValue.text = "B"
-                                rgbColorBinding.blueLayout.txtColorValue.text = rgbStatue[3]
+//                                rgbColorBinding.blueLayout.txtColorValue.text = rgbStatue[3]
                             }
                             isUpdate = true
                         }

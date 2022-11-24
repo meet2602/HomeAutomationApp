@@ -81,7 +81,7 @@ class VerifyActivity : AppCompatActivity() {
         verifyBinding.copyBtn.setOnClickListener {
             if (verifyBinding.edWifiName.text.toString().trim().isEmpty()) {
                 verifyBinding.txtWifiNameL.error = "Required"
-            } else if (verifyBinding.edWifiName.text.toString().trim().length != 8) {
+            } else if (verifyBinding.edWifiName.text.toString().trim().length > 8) {
                 verifyBinding.txtWifiNameL.error = "Wifi name must be 8 characters!"
             } else {
                 verifyBinding.txtWifiNameL.error = null
@@ -249,9 +249,10 @@ class VerifyActivity : AppCompatActivity() {
                     Log.d("success", it.message.toString())
                     if (it.data != null) {
                         sessionManager.isDeviceConnected = it.data.deviceConnect
+                        sessionManager.ipAddress = it.data.deviceIpAddress
                         if (sessionManager.isDeviceConnected) {
                             longShowToast("Device is connected!")
-                            startActivity(Intent(this, MainActivity::class.java))
+                            startActivity(Intent(this, DashBoardActivity::class.java))
                             finish()
                         } else {
                             longShowToast("Device is not connected!")

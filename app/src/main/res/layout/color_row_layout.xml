@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:max="255"
             android:min="0"
+            android:progress="255"
             app:layout_constraintBottom_toBottomOf="@+id/textFieldValue"
             app:layout_constraintEnd_toStartOf="@+id/txtColorValue"
             app:layout_constraintStart_toEndOf="@+id/textFieldValue"

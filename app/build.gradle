@@ -44,7 +44,7 @@ dependencies {
 
 
 //    implementation "androidx.security:security-crypto:1.0.0"
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.24'
 //    implementation "com.github.skydoves:colorpickerpreference:2.0.6"
 
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.3'

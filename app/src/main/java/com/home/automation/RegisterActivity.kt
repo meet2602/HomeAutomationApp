@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.home.automation.databinding.ActivityRegisterBinding
 import com.home.automation.models.UserModel
 import com.home.automation.utils.*
+import com.home.automation.viewmodel.DeviceViewModel
 import com.home.automation.viewmodel.UserViewModel
 
 
@@ -29,6 +30,10 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
     private val userViewModel: UserViewModel by lazy {
         ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)
             .create(UserViewModel()::class.java)
+    }
+    private val deviceViewModel: DeviceViewModel by lazy {
+        ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)
+            .create(DeviceViewModel()::class.java)
     }
     private val sessionManager: SessionManager by lazy { SessionManager(this) }
     private var isValidPassword = false
@@ -146,10 +151,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                         name,
                         email
                     )
-                    longShowToast("Register Successfully!")
-                    startActivity(Intent(this, VerifyActivity::class.java))
-                    startActivityAnimation()
-                    finish()
+                    callAddComponents()
                 }
                 Status.ERROR -> {
                     Log.d("error", it.message.toString())
@@ -203,4 +205,36 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    private fun callAddComponents() {
+        val body = hashMapOf<String, Any>(
+            "led1StateMsg" to "led1Off",
+            "led2StateMsg" to "led2Off",
+            "led3StateMsg" to "led3Off",
+            "led4StateMsg" to "led4Off",
+            "fanStateMsg" to "fan0Off",
+            "rgbStateMsg" to "RGBOff/0/0/0",
+            "tempValue" to 0.0F,
+        )
+
+        deviceViewModel.addComponents(sessionManager.userId, body).observe(this) {
+            when (it.status) {
+
+                Status.LOADING -> {
+
+                }
+                Status.SUCCESS -> {
+                    Log.d("success", it.message.toString())
+                    longShowToast("Register Successfully!")
+                    startActivity(Intent(this, VerifyActivity::class.java))
+                    startActivityAnimation()
+                    finish()
+                }
+                Status.ERROR -> {
+                    Log.d("error", it.message.toString())
+                    longShowToast(it.message.toString())
+                }
+            }
+
+        }
+    }
 }

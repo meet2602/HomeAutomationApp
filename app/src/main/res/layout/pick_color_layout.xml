@@ -16,7 +16,7 @@
             android:id="@+id/colorView"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@android:color/holo_blue_dark" />
+            android:background="@color/white" />
 
         <include
             android:id="@+id/redLayout"
